@@ -1,9 +1,24 @@
 /* Treehouse FSJS Techdegree
  * Project 4 - OOP Game App
  * app.js */
+let game;
 
+//stores e.target into a variable
+let clicked;
 
-const game = new Game();
-const phrase = new Phrase(game.getRandomPhrase);
+let button = document.getElementById('btn__reset');
+let letterButton = document.querySelectorAll('.key');
 
-phrase.addPhraseToDisplay();
+//when the start game button is clicked it begins a new game
+button.addEventListener('click', e => {
+    game = new Game();
+    game.startGame();
+});
+
+//Controls handle interaction with all the buttons
+letterButton.forEach(button => {
+    button.addEventListener('click', e => {
+        clicked = e.target;
+        game.handleInteraction();
+    })
+});
