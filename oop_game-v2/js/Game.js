@@ -6,17 +6,15 @@ let startScreen = document.getElementById('overlay');
 //selects the onscreen keybaord buttons
 let keyboard = document.querySelectorAll('.key');
 
-//failedLetters keeps track of failed attempts
-let failedLetters = 0;
 
 class Game {
     constructor(phrase) {
         this.missed = 0;
-        this.phrases = ['death by a thousand cuts', 
-                        'meet me in the afterglow', 
-                        'familiarity breeds contempt',
-                        'meet me at midnight',
-                        'i remember it all too well'];
+        this.phrases = [new Phrase('death by a thousand cuts'), 
+                        new Phrase('meet me in the afterglow'), 
+                        new Phrase('familiarity breeds contempt'),
+                        new Phrase('meet me at midnight'),
+                        new Phrase('i remember it all too well')];
         this.activePhrase = null;
     }
 /**
@@ -34,8 +32,9 @@ class Game {
  */
     startGame() {
         startScreen.style.display = 'none';
-        let phrase = new Phrase(this.getRandomPhrase());
-        phrase.addPhraseToDisplay();
+        this.activePhrase = this.getRandomPhrase();
+        this.activePhrase.addPhraseToDisplay();
+        
     }
 
     //checks to see if the player has revelaed all of the letters in the 
@@ -57,9 +56,9 @@ class Game {
     //then end the game by calling the gameoOver() method.
     removeLife() {
         let hearts = document.querySelectorAll('.tries');
-        hearts[failedLetters].src = 'images/lostHeart.png';
-        failedLetters += 1;
-        if (failedLetters === 4) {
+        hearts[this.missed].src = 'images/lostHeart.png';
+        this.missed += 1;
+        if (this.missed === 4) {
             this.gameOver();
         }
     }
@@ -71,7 +70,7 @@ class Game {
     gameOver() {
         startScreen.style.display = 'inline';
         let h1Elements = document.querySelectorAll('h1');
-        if (failedLetters < 4) {
+        if (this.missed < 4) {
             h1Elements.forEach(element => {
                 element.innerHTML = "Congratulations! You Win!";
                 startScreen.classList.remove('start');
@@ -108,6 +107,8 @@ class Game {
             key.classList.remove('chosen');
             key.classList.remove('wrong');
         });
+
+        this.missed = 0;
 
         let heartImages = document.querySelectorAll('.tries');
         heartImages.forEach(heart => {
