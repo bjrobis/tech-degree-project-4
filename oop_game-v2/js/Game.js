@@ -55,9 +55,10 @@ class Game {
     //then end the game by calling the gameoOver() method.
     removeLife() {
         let hearts = document.querySelectorAll('.tries');
-        hearts[this.missed].src = 'images/lostHeart.png';
+        console.log(hearts[this.missed].firstChild);
+        hearts[this.missed].firstChild.src = 'images/lostHeart.png';
         this.missed += 1;
-        if (this.missed === 4) {
+        if (this.missed === 5) {
             this.gameOver();
         }
     }
@@ -69,7 +70,7 @@ class Game {
     gameOver() {
         startScreen.style.display = 'inline';
         let h1Elements = document.querySelectorAll('h1');
-        if (this.missed < 4) {
+        if (this.missed < 5) {
             h1Elements.forEach(element => {
                 element.innerHTML = "Congratulations! You Win!";
                 startScreen.classList.remove('start');
@@ -88,10 +89,10 @@ class Game {
 
     handleInteraction() {
         clicked.disabled = true;
-        phrase.checkLetter();
-        if (phrase.checkLetter() === true) {
+        this.activePhrase.checkLetter();
+        if (this.activePhrase.checkLetter() === true) {
             clicked.classList.add('chosen');
-            phrase.showMatchedLetter();
+            this.activePhrase.showMatchedLetter();
             this.checkForWin();
         } else {
             clicked.classList.add('wrong');
@@ -111,10 +112,10 @@ class Game {
 
         let heartImages = document.querySelectorAll('.tries');
         heartImages.forEach(heart => {
-            heart.src = 'images/liveHeart.png';
+            heart.firstChild.src = 'images/liveHeart.png';
         })
 
-        let listItems = document.getElementById('phrase').children;
+        let listItems = document.getElementById('phrase').firstElementChild;
         listItems.innerHTML = '';
 
     }
