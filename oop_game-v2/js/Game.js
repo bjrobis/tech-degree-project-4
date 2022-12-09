@@ -6,6 +6,12 @@ let startScreen = document.getElementById('overlay');
 //selects the onscreen keybaord buttons
 let keyboard = document.querySelectorAll('.key');
 
+//selects the h1 element
+let h1Elements = document.querySelector('h1');
+
+//win marker to keep track of if player has won the game.
+let win = 'no';
+
 
 class Game {
     constructor(phrase) {
@@ -33,6 +39,8 @@ class Game {
         startScreen.style.display = 'none';
         this.activePhrase = this.getRandomPhrase();
         this.activePhrase.addPhraseToDisplay();
+        win = 'no';
+        this.missed = 0;
         
     }
 
@@ -46,6 +54,7 @@ class Game {
         });
         if (remainingLetters.length === 0) {
             this.gameOver();
+           
         }
     }
 
@@ -55,7 +64,6 @@ class Game {
     //then end the game by calling the gameoOver() method.
     removeLife() {
         let hearts = document.querySelectorAll('.tries');
-        console.log(hearts[this.missed].firstChild);
         hearts[this.missed].firstChild.src = 'images/lostHeart.png';
         this.missed += 1;
         if (this.missed === 5) {
@@ -69,25 +77,25 @@ class Game {
     //'start' CSS class with either the 'win' or 'lose' CSS class.
     gameOver() {
         startScreen.style.display = 'inline';
-        let h1Elements = document.querySelectorAll('h1');
         if (this.missed < 5) {
-            h1Elements.forEach(element => {
-                element.innerHTML = "Congratulations! You Win!";
-                startScreen.classList.remove('start');
-                startScreen.classList.add('win');
-                this.resetGame();
-            });
-        } else {
-            h1Elements.forEach(element => {
-                element.innerHTML = "Sorry! You Lost!";
-                startScreen.classList.remove('start');
-                startScreen.classList.add('lose');
-                this.resetGame();
-            });
+            h1Elements.innerHTML = "You Win!";
+            startScreen.classList.remove('start');
+            startScreen.classList.remove('lose');
+            startScreen.classList.add('win');
+            this.resetGame();
+            } else {
+            h1Elements.innerHTML = "Sorry! You Lost!";
+            startScreen.classList.remove('start');
+            startScreen.classList.remove('win');
+            startScreen.classList.add('lose');
+            this.resetGame();
+            };
         }
-    }
 
-    handleInteraction() {
+   
+   //game hander: disables keys that have already been clicked. Activates checkletter method to see if the letter is 
+   //contained in the phrase and applies appropriate consequence based on if letter is correct or incorrect.
+        handleInteraction() {
         clicked.disabled = true;
         this.activePhrase.checkLetter();
         if (this.activePhrase.checkLetter() === true) {
@@ -101,14 +109,13 @@ class Game {
         }
     }
 
+    //re-enables all the keys and sets the classes back to normal. Also resets the heart images and removes the previously chosen phrase.
     resetGame() {
         keyboard.forEach(key => {
             key.disabled = false;
             key.classList.remove('chosen');
             key.classList.remove('wrong');
         });
-
-        this.missed = 0;
 
         let heartImages = document.querySelectorAll('.tries');
         heartImages.forEach(heart => {
@@ -120,3 +127,4 @@ class Game {
 
     }
 }
+

@@ -9,6 +9,7 @@ class Phrase {
         this.phrase = phrase.toLowerCase();
     }
 
+    //takes the random phrase, turns it into an array, and then creates an html element for each one and places it on the display
     addPhraseToDisplay() {
     let displayArray = this.phrase.split('');
     displayArray.forEach(letter => {
